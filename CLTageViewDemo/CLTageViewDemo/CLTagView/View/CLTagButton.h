@@ -12,12 +12,14 @@
 
 - (void)tagButtonDelete:(CLTagButton *)tagBtn;
 
+- (void)tagButtonDidSelected:(CLTagButton *)tagBtn;
+
 @end
 
 @interface CLTagButton : UIButton
 
 - (instancetype)initWithTextField:(UITextField *)textField;
 
-@property (weak, nonatomic) id<CLTagButtonDelegate> deleteDelegate;
+@property (weak, nonatomic) id<CLTagButtonDelegate> tagBtnDelegate;
 
 @end

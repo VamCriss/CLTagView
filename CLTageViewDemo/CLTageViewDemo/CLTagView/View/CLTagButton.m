@@ -39,8 +39,21 @@
     if (self.isSelected) {
         self.backgroundColor = cl_colorWithHex(0x55b936);
     }else {
-        self.backgroundColor = [UIColor whiteColor];
+         self.backgroundColor = [UIColor whiteColor];
+        !_menuController?:[_menuController setMenuVisible:NO animated:YES];
     }
+}
+
+- (void)deleteItemClicked:(id)sender {
+    self.selected = NO;
+    NSLog(@"%@", sender);
+    if ([self.tagBtnDelegate respondsToSelector:@selector(tagButtonDelete:)]) {
+        [self.tagBtnDelegate tagButtonDelete:self];
+    }
+}
+
+- (void)tagBtnClick:(UIButton *)sender {
+    self.selected = !self.isSelected;
     if (self.selected) {
         _menuController = [UIMenuController sharedMenuController];
         
@@ -50,21 +63,10 @@
         [_menuController setMenuItems:[NSArray arrayWithObject:resetMenuItem]];
         [_menuController setTargetRect:self.bounds inView:self];
         [_menuController setMenuVisible:YES animated:YES];
-    }else {
-        [_menuController setMenuVisible:NO animated:YES];
     }
-}
-
-- (void)deleteItemClicked:(id)sender {
-    self.selected = NO;
-    NSLog(@"%@", sender);
-    if ([self.deleteDelegate respondsToSelector:@selector(tagButtonDelete:)]) {
-        [self.deleteDelegate tagButtonDelete:self];
+    if ([self.tagBtnDelegate respondsToSelector:@selector(tagButtonDidSelected:)]) {
+        [self.tagBtnDelegate tagButtonDidSelected:self];
     }
-}
-
-- (void)tagBtnClick:(UIButton *)sender {
-    self.selected = !self.isSelected;
 }
 
 - (BOOL)canBecomeFirstResponder {
