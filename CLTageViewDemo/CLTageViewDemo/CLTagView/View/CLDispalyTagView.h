@@ -37,5 +37,21 @@
  */
 @property (assign, nonatomic) NSInteger maxRows;
 
+/**
+ 显示已经被打上的标签,如果不想显示传递nil
+ */
+@property (strong, nonatomic) NSArray<NSString *> *labels;
+
+/**
+ 获取贴上的标签
+ */
+@property (strong, nonatomic, readonly) NSArray *tags;
+
+/**
+ 删除标签操作
+
+ @param tag 标签的文字说明
+ */
+- (void)removeTagWithTag:(NSString *)tag;
 
 @end

@@ -23,7 +23,12 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.navigationController pushViewController:[CLTagViewController new] animated:YES];
+    CLTagsModel *model = [[CLTagsModel alloc] init];
+    model.title = @"所有标签是啥";
+    model.tagsArray = @[@"帅气", @"handsome啊发发发发生", @"酷爱的法师打发", @"1111111111111", @"这是一个设sad挨打大大多", @"撒打算发发发", @"dfsafafafasfaf"];
+    CLTagViewController *tagVC = [[CLTagViewController alloc] init];
+    tagVC.tagsModelArray = @[model];
+    [self.navigationController pushViewController:tagVC animated:YES];
 }
 
 

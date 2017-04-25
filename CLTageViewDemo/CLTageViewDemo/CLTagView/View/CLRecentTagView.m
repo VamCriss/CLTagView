@@ -7,15 +7,41 @@
 //
 
 #import "CLRecentTagView.h"
+#import "CLTagView.h"
+#import "CLTools.h"
+
+@interface CLRecentTagView ()
+
+@property (nonatomic, weak) UIScrollView *scrollView;
+
+@end
 
 @implementation CLRecentTagView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self showUI];
+    }
+    return self;
 }
-*/
+
+- (void)showUI {
+    self.backgroundColor = cl_colorWithHex(0xf0eff3);
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    scrollView.alwaysBounceVertical = YES;
+    self.scrollView = scrollView;
+    [self addSubview:scrollView];
+    scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+}
+
+- (void)setTagsModel:(NSArray<CLTagsModel *> *)tagsModel {
+    if (tagsModel.count == 1) {
+        CLTagView *tagView = [[CLTagView alloc] init];
+        [self.scrollView addSubview:tagView];
+        tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        tagView.tags = tagsModel.firstObject;
+    }
+}
 
 @end

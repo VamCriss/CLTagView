@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CLTagView.h"
 
 @interface CLTagViewController : UIViewController
+
+@property (nonatomic, strong) NSArray<CLTagsModel *> *tagsModelArray;
 
 @end

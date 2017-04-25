@@ -14,9 +14,14 @@ static inline UIColor *cl_colorWithHex(uint32_t hex) {
     return [UIColor colorWithRed:red / 255.0 green:green / 255.0 blue:blue / 255.0 alpha:1.0];
 }
 
-#define kCLDistance 10
-#define kCLTextFieldGap 8
-#define kCLTagViewWidth 80
-#define kCLTextFieldsHorizontalGap 10
-#define kCLTagViewHorizontaGap 13   // 标签展示页tag距离两端的距离
+#define kCLTagFont 13                 // 标签文字的大小
+#define kCLDistance 10                // 上下两个标签的间隙
+#define kCLTextFieldGap 8             // 标签中，文字距离顶部(4)与底部(4)的距离（ 4 + 4 = 8）
+#define kCLTagViewWidth 80            // 标签输入textField默认宽度
+#define kCLTextFieldsHorizontalGap 10 // 两个标签框的水平间距
+#define kCLTextFieldsVerticalGap 10   // 两个标签框的垂直间距
+#define kCLTagViewHorizontaGap 13     // 标签展示页水平两端的与标签的距离
+#define kCLDashesBorderWidth 0.8f     // 标签的borderWidth
+
+#define kCLHeadViewdHeight 44
 

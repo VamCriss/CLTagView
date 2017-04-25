@@ -65,7 +65,7 @@
 
 @property (strong, nonatomic) CAShapeLayer *border;
 @property (strong, nonatomic) NSMutableArray<CLTagButton *> *tagBtnArrayM; // 标签
-@property (strong, nonatomic) NSCache *tagCache;
+@property (strong, nonatomic) NSMutableDictionary *tagCache;
 
 
 @end
@@ -77,8 +77,10 @@
     
     CGFloat _originalWidth;
     NSInteger _rowsOfTags;
+    
     BOOL _textFieldIsEditting;
     BOOL _textFieldIsDeleting;
+    BOOL _textFieldEndEditting;
 }
 
 - (instancetype)initWithOriginalY:(CGFloat)originalY Font:(CGFloat)fontSize; {
@@ -120,13 +122,7 @@
     _inputField.layer.cornerRadius = _inputField.bounds.size.height * 0.5;
 }
 
-#pragma mark - UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if (_selectedBtn) {
-        _selectedBtn.selected = NO;
-    }
-}
-
+// 判断是否包含中文
 - (BOOL) deptNameInputShouldChineseWithString:(NSString *)string{
     NSString *regex = @"[\u4e00-\u9fa5]+";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
@@ -134,6 +130,14 @@
         return YES;
     }
     return NO;
+}
+
+
+#pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (_selectedBtn) {
+        _selectedBtn.selected = NO;
+    }
 }
 
 -(void)textFiledEditChanged:(NSNotification *)obj{
@@ -203,13 +207,16 @@
         return YES;
     }
     
+    _textFieldEndEditting = YES;
     [self addTagWithTag:textField.text];
+    _textFieldEndEditting = NO;
 
     textField.text = @"";
     self.border.lineWidth = 0;
     return YES;
 }
 
+// 更新textField的frame
 - (void)reloadTextField:(UITextField *)textField allStr:(NSString *)allStr {
     CGFloat width = [allStr sizeWithAttributes:@{NSFontAttributeName:textField.font}].width + textField.layer.cornerRadius * 2;
     CGRect rect = textField.frame;
@@ -227,7 +234,13 @@
 
 - (void)addTagWithTag:(NSString *)text {
     if (![self.tagCache objectForKey:text]) {
-        CLTagButton *tagBtn = [[CLTagButton alloc] initWithTextField:_inputField];
+        CLTagButton *tagBtn;
+        if (_textFieldEndEditting) {
+            tagBtn = [[CLTagButton alloc] initWithTextField:_inputField];
+        }else {
+            tagBtn = [CLTagButton initWithTagDesc:text];
+            [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:tagBtn];
+        }
         tagBtn.tagBtnDelegate = self;
         [self addSubview:tagBtn];
         [self.tagBtnArrayM addObject:tagBtn];
@@ -268,8 +281,8 @@
     CGFloat preBottom = preTagBtn? CGRectGetMaxY(preTagBtn.frame) : 0;
     CGFloat preY = preTagBtn? preTagBtn.frame.origin.y : kCLDistance;
     
-    if (preTaling + kCLTagViewHorizontaGap * 2 + currentTagBtn.bounds.size.width > [UIScreen mainScreen].bounds.size.width) {
-        currentTagBtn.frame = CGRectMake(kCLTagViewHorizontaGap, preBottom + kCLDistance, currentTagBtn.frame.size.width, currentTagBtn.frame.size.height);
+    if (preTaling + kCLTagViewHorizontaGap * 2 + currentTagBtn.bounds.size.width > self.bounds.size.width) {
+        currentTagBtn.frame = CGRectMake(kCLTagViewHorizontaGap, preBottom + kCLTextFieldsVerticalGap, currentTagBtn.frame.size.width, currentTagBtn.frame.size.height);
     }else {
         currentTagBtn.frame = CGRectMake(preTaling + kCLTextFieldsHorizontalGap, preY, currentTagBtn.frame.size.width, currentTagBtn.frame.size.height);
     }
@@ -285,13 +298,16 @@
             _rowsOfTags --;
         }
         
+        
         self.contentSize = CGSizeMake(self.frame.size.width, tagViewExpectHeight);
         if (_rowsOfTags > (self.maxRows?:3)) {
+            self.showsVerticalScrollIndicator = YES;
             // 滑动到底部
             CGRect bottomRect = CGRectMake(0, self.contentSize.height - 1 , 1, 1);
             [self scrollRectToVisible:bottomRect animated:NO];
             return;
         }
+        self.showsVerticalScrollIndicator = NO;
         if (tagViewHeight != tagViewExpectHeight) {
             CGRect tagViewRect = self.frame;
             tagViewRect.size.height = tagViewExpectHeight;
@@ -345,7 +361,7 @@
     textField.borderStyle =  UITextBorderStyleNone;
     if (self.border) {
         if (self.border.lineWidth == 0) {
-            self.border.lineWidth = 0.8f;
+            self.border.lineWidth = kCLDashesBorderWidth;
         }
         self.border.path = [UIBezierPath bezierPathWithRoundedRect:textField.bounds cornerRadius:textField.layer.cornerRadius].CGPath;
         return;
@@ -360,7 +376,7 @@
     
     border.frame = textField.bounds;
     
-    border.lineWidth = 0.8f;
+    border.lineWidth = kCLDashesBorderWidth;
     
     border.lineCap = @"round";
     
@@ -374,6 +390,10 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UITextViewTextDidChangeNotification object:_inputField];
 }
 
+- (NSArray *)tags {
+    return [self.tagCache allKeys];
+}
+
 #pragma mark - lazy
 - (NSMutableArray<CLTagButton *> *)tagBtnArrayM {
     if (!_tagBtnArrayM) {
@@ -382,9 +402,9 @@
     return _tagBtnArrayM;
 }
 
-- (NSCache *)tagCache {
+- (NSMutableDictionary *)tagCache {
     if (!_tagCache) {
-        _tagCache = [[NSCache alloc] init];
+        _tagCache = [[NSMutableDictionary alloc] init];
     }
     return _tagCache;
 }

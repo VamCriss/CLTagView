@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class CLTagsModel;
 
 @interface CLRecentTagView : UIView
+
+@property (strong, nonatomic) NSArray<CLTagsModel *> *tagsModel;
 
 @end

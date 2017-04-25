@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2815CCF61EAF1BA000311D60 /* CLTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2815CCF51EAF1BA000311D60 /* CLTagView.m */; };
 		287CE03A1EA9F215005A6F47 /* CLTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 287CE0391EA9F215005A6F47 /* CLTagButton.m */; };
 		289748511EA853BA00060A09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 289748501EA853BA00060A09 /* main.m */; };
 		289748541EA853BA00060A09 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 289748531EA853BA00060A09 /* AppDelegate.m */; };
@@ -39,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2815CCF41EAF1BA000311D60 /* CLTagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLTagView.h; sourceTree = "<group>"; };
+		2815CCF51EAF1BA000311D60 /* CLTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLTagView.m; sourceTree = "<group>"; };
 		287CE0381EA9F215005A6F47 /* CLTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLTagButton.h; sourceTree = "<group>"; };
 		287CE0391EA9F215005A6F47 /* CLTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLTagButton.m; sourceTree = "<group>"; };
 		2897484C1EA853BA00060A09 /* CLTageViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CLTageViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +185,8 @@
 				2897488F1EA854DC00060A09 /* CLRecentTagView.m */,
 				287CE0381EA9F215005A6F47 /* CLTagButton.h */,
 				287CE0391EA9F215005A6F47 /* CLTagButton.m */,
+				2815CCF41EAF1BA000311D60 /* CLTagView.h */,
+				2815CCF51EAF1BA000311D60 /* CLTagView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -331,6 +336,7 @@
 				2897488A1EA854A900060A09 /* CLDispalyTagView.m in Sources */,
 				289748901EA854DC00060A09 /* CLRecentTagView.m in Sources */,
 				289748571EA853BA00060A09 /* ViewController.m in Sources */,
+				2815CCF61EAF1BA000311D60 /* CLTagView.m in Sources */,
 				289748541EA853BA00060A09 /* AppDelegate.m in Sources */,
 				289748871EA8547100060A09 /* CLTagViewController.m in Sources */,
 				289748511EA853BA00060A09 /* main.m in Sources */,

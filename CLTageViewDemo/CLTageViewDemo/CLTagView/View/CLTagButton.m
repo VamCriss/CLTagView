@@ -26,12 +26,29 @@
     [self setTitleColor:cl_colorWithHex(0x55b936) forState:UIControlStateNormal];
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     
-    self.titleLabel.font = textField.font;
-    self.layer.cornerRadius = textField.layer.cornerRadius;
-    self.layer.borderWidth = 0.8f;
-    self.layer.borderColor = cl_colorWithHex(0x55b936).CGColor;
-    self.titleLabel.contentMode = UIViewContentModeCenter;
+    [self attributeRadius:textField.layer.cornerRadius borderWidth:kCLDashesBorderWidth borderColor:cl_colorWithHex(0x55b936) contentMode:UIViewContentModeCenter font:textField.font];
     [self addTarget:self action:@selector(tagBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+}
+
++ (instancetype)initWithTagDesc:(NSString *)tagStr {
+    CLTagButton *tagBtn = [[CLTagButton alloc] init];
+    [tagBtn setTitle:tagStr forState:UIControlStateNormal];
+    [tagBtn setTitleColor:cl_colorWithHex(0x474747) forState:UIControlStateNormal];
+    tagBtn.titleLabel.font = [UIFont systemFontOfSize:kCLTagFont];
+    [tagBtn sizeToFit];
+    CGFloat height = tagBtn.bounds.size.height + kCLTextFieldGap;
+    [tagBtn attributeRadius:height * 0.5 borderWidth:kCLDashesBorderWidth borderColor:cl_colorWithHex(0xdadadd) contentMode:UIViewContentModeCenter font:tagBtn.titleLabel.font];
+    CGFloat width = [tagStr sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + height;
+    tagBtn.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, width, height);
+    return tagBtn;
+}
+
+- (void)attributeRadius:(CGFloat)cornerRadius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor contentMode:(UIViewContentMode)contentMode font:(UIFont *)font{
+    self.layer.cornerRadius = cornerRadius;
+    self.layer.borderWidth = borderWidth;
+    self.layer.borderColor = borderColor.CGColor;
+    self.titleLabel.contentMode = contentMode;
+    self.titleLabel.font = font;
 }
 
 - (void)setSelected:(BOOL)selected {
@@ -46,7 +63,6 @@
 
 - (void)deleteItemClicked:(id)sender {
     self.selected = NO;
-    NSLog(@"%@", sender);
     if ([self.tagBtnDelegate respondsToSelector:@selector(tagButtonDelete:)]) {
         [self.tagBtnDelegate tagButtonDelete:self];
     }
