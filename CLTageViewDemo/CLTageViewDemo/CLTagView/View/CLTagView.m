@@ -10,10 +10,11 @@
 #import "CLTools.h"
 #import "CLTagButton.h"
 
-@interface CLTagView ()
+@interface CLTagView () <CLTagButtonDelegate>
 
 @property (nonatomic, weak) UILabel *titleLabel;
 @property (weak, nonatomic) UIView *tagsShowView;
+@property (nonatomic, strong) NSMutableDictionary *tagsCache;
 
 @end
 
@@ -27,6 +28,9 @@
 }
 
 - (void)setupUI {
+    _tagsCache = [NSMutableDictionary dictionary];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTagsStatus:) name:kCLTagViewTagDeleteNotification object:nil];
+    
     self.backgroundColor = [UIColor purpleColor];
     
     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kCLHeadViewdHeight)];
@@ -37,7 +41,7 @@
     UILabel *titleLabel = [[UILabel alloc] init];
     self.titleLabel = titleLabel;
     titleLabel.text = @"所有标签";
-    titleLabel.font = [UIFont systemFontOfSize:13];
+    titleLabel.font = [UIFont systemFontOfSize:kCLRecentTitleFont];
     titleLabel.textColor = cl_colorWithHex(0x8a949b);
     [headView addSubview:titleLabel];
     
@@ -56,14 +60,32 @@
 }
 
 - (void)setTags:(CLTagsModel *)tags{
+    _tags = tags;
     self.titleLabel.text = tags.title;
     [self layoutTags:tags.tagBtnArray];
 }
 
 - (void)layoutTags:(NSArray<CLTagButton *> *)tags {
     for (CLTagButton *tagBtn in tags) {
+        tagBtn.tagBtnDelegate = self;
+        [_tagsCache setObject:tagBtn forKey:tagBtn.titleLabel.text];
         [self.tagsShowView addSubview:tagBtn];
     }
+}
+
+- (void)recentTagButtonClick:(CLTagButton *)tagBtn {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCLRecentTagViewTagClickNotification object:nil userInfo:@{kCLRecentTagViewTagClickKey: tagBtn}];
+}
+
+#pragma mark - 通知
+- (void)reloadTagsStatus:(NSNotification *)notification {
+    CLTagButton *tagBtn = notification.userInfo[kCLTagViewTagDeleteKey];
+    CLTagButton *deleteTagBtn = [_tagsCache objectForKey:tagBtn.titleLabel.text];
+    deleteTagBtn.tagSelected = NO;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

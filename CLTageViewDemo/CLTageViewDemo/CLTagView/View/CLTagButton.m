@@ -23,23 +23,24 @@
 - (void)initializeAttributeWithTextField:(UITextField *)textField {
     [self setTitle:textField.text forState:UIControlStateNormal];
     
-    [self setTitleColor:cl_colorWithHex(0x55b936) forState:UIControlStateNormal];
-    [self setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [self setTitleColor:kCLTag_Normal_TextColor forState:UIControlStateNormal];
+    [self setTitleColor:kCLTag_Selected_TextColor forState:UIControlStateSelected];
     
-    [self attributeRadius:textField.layer.cornerRadius borderWidth:kCLDashesBorderWidth borderColor:cl_colorWithHex(0x55b936) contentMode:UIViewContentModeCenter font:textField.font];
+    [self attributeRadius:textField.layer.cornerRadius borderWidth:kCLDashesBorderWidth borderColor:kCLTag_Normal_BorderColor contentMode:UIViewContentModeCenter font:textField.font];
     [self addTarget:self action:@selector(tagBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 + (instancetype)initWithTagDesc:(NSString *)tagStr {
     CLTagButton *tagBtn = [[CLTagButton alloc] init];
     [tagBtn setTitle:tagStr forState:UIControlStateNormal];
-    [tagBtn setTitleColor:cl_colorWithHex(0x474747) forState:UIControlStateNormal];
+    [tagBtn setTitleColor:kCLRecentTag_Normal_TextColor forState:UIControlStateNormal];
     tagBtn.titleLabel.font = [UIFont systemFontOfSize:kCLTagFont];
     [tagBtn sizeToFit];
     CGFloat height = tagBtn.bounds.size.height + kCLTextFieldGap;
-    [tagBtn attributeRadius:height * 0.5 borderWidth:kCLDashesBorderWidth borderColor:cl_colorWithHex(0xdadadd) contentMode:UIViewContentModeCenter font:tagBtn.titleLabel.font];
+    [tagBtn attributeRadius:height * 0.5 borderWidth:kCLDashesBorderWidth borderColor:kCLRecentTag_Normal_BorderColor contentMode:UIViewContentModeCenter font:tagBtn.titleLabel.font];
     CGFloat width = [tagStr sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + height;
     tagBtn.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, width, height);
+    [tagBtn addTarget:tagBtn action:@selector(recentTagClick:) forControlEvents:UIControlEventTouchUpInside];
     return tagBtn;
 }
 
@@ -54,9 +55,9 @@
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
     if (self.isSelected) {
-        self.backgroundColor = cl_colorWithHex(0x55b936);
+        self.backgroundColor = kCLTag_Selected_BackgroundColor;
     }else {
-         self.backgroundColor = [UIColor whiteColor];
+         self.backgroundColor = kCLTag_Normal_BackgroundColor;
         !_menuController?:[_menuController setMenuVisible:NO animated:YES];
     }
 }
@@ -82,6 +83,27 @@
     }
     if ([self.tagBtnDelegate respondsToSelector:@selector(tagButtonDidSelected:)]) {
         [self.tagBtnDelegate tagButtonDidSelected:self];
+    }
+}
+
+- (void)recentTagClick:(UIButton *)sender {
+    self.tagSelected = !self.tagSelected;
+   
+    if ([self.tagBtnDelegate respondsToSelector:@selector(recentTagButtonClick:)]) {
+        [self.tagBtnDelegate recentTagButtonClick:self];
+    }
+}
+
+- (void)setTagSelected:(BOOL)tagSelected {
+    _tagSelected = tagSelected;
+    if (self.tagSelected) {
+        self.backgroundColor = kCLRecentTag_Normal_BackgroundColor;
+        [self setTitleColor:kCLRecentTag_Selected_TextColor forState:UIControlStateNormal];
+        self.layer.borderColor = kCLRecentTag_Selected_BorderColor.CGColor;
+    }else {
+        self.backgroundColor = kCLRecentTag_Selected_BackgroundColor;
+        [self setTitleColor:kCLRecentTag_Normal_TextColor forState:UIControlStateNormal];
+        self.layer.borderColor = kCLRecentTag_Normal_BorderColor.CGColor;
     }
 }
 

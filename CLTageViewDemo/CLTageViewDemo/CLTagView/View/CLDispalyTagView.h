@@ -18,11 +18,6 @@
 @property (strong, nonatomic) UIColor *normalTextColor;
 
 /**
- 设置输入框中输入时标签的背景颜色(默认白色)
- */
-@property (strong, nonatomic) UIColor *normalTextBackColor;
-
-/**
  设置输入框中输入时标签的边框颜色(默认灰色)
  */
 @property (strong, nonatomic) UIColor *textFieldBorderColor;
@@ -33,7 +28,7 @@
 @property (assign, nonatomic) NSInteger maxStringAmount;
 
 /**
- 最多显示标签的行数
+ 最多显示标签的行数(默认是3)
  */
 @property (assign, nonatomic) NSInteger maxRows;
 
@@ -53,5 +48,12 @@
  @param tag 标签的文字说明
  */
 - (void)removeTagWithTag:(NSString *)tag;
+
+/**
+ 添加标签
+
+ @param text 标签的文字
+ */
+- (void)addTagWithTag:(NSString *)text;
 
 @end

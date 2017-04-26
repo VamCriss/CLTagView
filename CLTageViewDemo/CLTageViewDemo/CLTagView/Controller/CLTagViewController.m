@@ -9,6 +9,7 @@
 #import "CLTagViewController.h"
 #import "CLDispalyTagView.h"
 #import "CLRecentTagView.h"
+#import "CLTools.h"
 
 @interface CLTagViewController ()
 
@@ -31,7 +32,7 @@
         originalY = 64;
     }
     self.automaticallyAdjustsScrollViewInsets = NO;
-    _displayTagView = [[CLDispalyTagView alloc] initWithOriginalY:originalY Font:13];
+    _displayTagView = [[CLDispalyTagView alloc] initWithOriginalY:originalY Font:kCLTagFont];
     [self.view addSubview:_displayTagView];
     
     _recentTagView = [[CLRecentTagView alloc] init];

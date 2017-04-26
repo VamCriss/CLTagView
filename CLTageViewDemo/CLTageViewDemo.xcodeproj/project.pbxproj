@@ -20,6 +20,7 @@
 		289748871EA8547100060A09 /* CLTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289748861EA8547100060A09 /* CLTagViewController.m */; };
 		2897488A1EA854A900060A09 /* CLDispalyTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 289748891EA854A900060A09 /* CLDispalyTagView.m */; };
 		289748901EA854DC00060A09 /* CLRecentTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2897488F1EA854DC00060A09 /* CLRecentTagView.m */; };
+		FC7FDACF1EB06F31001DF894 /* CLTools.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7FDACE1EB06F31001DF894 /* CLTools.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		2897488E1EA854DC00060A09 /* CLRecentTagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLRecentTagView.h; sourceTree = "<group>"; };
 		2897488F1EA854DC00060A09 /* CLRecentTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLRecentTagView.m; sourceTree = "<group>"; };
 		289748921EA8588F00060A09 /* CLTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLTools.h; sourceTree = "<group>"; };
+		FC7FDACE1EB06F31001DF894 /* CLTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLTools.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				289748921EA8588F00060A09 /* CLTools.h */,
+				FC7FDACE1EB06F31001DF894 /* CLTools.m */,
 			);
 			path = tools;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				289748901EA854DC00060A09 /* CLRecentTagView.m in Sources */,
 				289748571EA853BA00060A09 /* ViewController.m in Sources */,
 				2815CCF61EAF1BA000311D60 /* CLTagView.m in Sources */,
+				FC7FDACF1EB06F31001DF894 /* CLTools.m in Sources */,
 				289748541EA853BA00060A09 /* AppDelegate.m in Sources */,
 				289748871EA8547100060A09 /* CLTagViewController.m in Sources */,
 				289748511EA853BA00060A09 /* main.m in Sources */,
@@ -491,6 +495,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CLTageViewDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.criss.CLTageViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -502,6 +507,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CLTageViewDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.criss.CLTageViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

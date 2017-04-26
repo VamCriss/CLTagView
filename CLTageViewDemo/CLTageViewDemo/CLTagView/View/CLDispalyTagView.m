@@ -76,6 +76,7 @@
     UIMenuController *_menuController;
     
     CGFloat _originalWidth;
+    CGFloat _tagHeight;
     NSInteger _rowsOfTags;
     
     BOOL _textFieldIsEditting;
@@ -89,7 +90,6 @@
     _inputField.returnKeyType = UIReturnKeyDone;
     _inputField.placeholder = @"输入标签";
     _inputField.borderStyle = UITextBorderStyleNone;
-    _inputField.layer.borderColor = cl_colorWithHex(0x55b936).CGColor;
     _inputField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _inputField.autocorrectionType = UITextAutocorrectionTypeNo;
     [_inputField sizeToFit];
@@ -98,6 +98,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFiledEditChanged:)
                                                 name:UITextFieldTextDidChangeNotification
                                               object:_inputField];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTagDisplayView:) name:kCLRecentTagViewTagClickNotification object:nil];
     
     return [self initWithFrame:CGRectMake(0, originalY, [UIScreen mainScreen].bounds.size.width, _inputField.bounds.size.height + kCLDistance * 2 + kCLTextFieldGap)];
 }
@@ -116,9 +117,9 @@
     [self addSubview:_inputField];
     _inputField.delegate = self;
     _inputField.tfDelegate = self;
-    CGFloat height = _inputField.bounds.size.height + kCLTextFieldGap;
-    _originalWidth = [_inputField.placeholder sizeWithAttributes:@{NSFontAttributeName:_inputField.font}].width + height;
-    _inputField.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, _originalWidth, height);
+    _tagHeight = _inputField.bounds.size.height + kCLTextFieldGap;
+    _originalWidth = [_inputField.placeholder sizeWithAttributes:@{NSFontAttributeName:_inputField.font}].width + _tagHeight;
+    _inputField.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, _originalWidth, _tagHeight);
     _inputField.layer.cornerRadius = _inputField.bounds.size.height * 0.5;
 }
 
@@ -132,15 +133,22 @@
     return NO;
 }
 
+- (CGFloat)tagWidthWithText:(NSString *)text {
+    return [text sizeWithAttributes:@{NSFontAttributeName:_inputField.font}].width + _tagHeight;
+}
 
-#pragma mark - UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if (_selectedBtn) {
-        _selectedBtn.selected = NO;
+#pragma mark - 通知方法
+- (void)reloadTagDisplayView:(NSNotification *)notification {
+    CLTagButton *tagBtn = notification.userInfo[kCLRecentTagViewTagClickKey];
+    NSLog(@"%@", tagBtn.titleLabel.text);
+    if (tagBtn.tagSelected) {
+        [self addTagWithTag:tagBtn.titleLabel.text];
+    }else {
+        [self removeTagWithTag:tagBtn.titleLabel.text];
     }
 }
 
--(void)textFiledEditChanged:(NSNotification *)obj{
+- (void)textFiledEditChanged:(NSNotification *)obj{
     
     UITextField *textField = (UITextField *)obj.object;
     if (_textFieldIsDeleting) {
@@ -149,7 +157,7 @@
         [self textFieldDashesWithTextField:textField];
         return;
     }
-
+    
     NSInteger maxLength = self.maxStringAmount?:10;
     NSString *toBeString = textField.text;
     NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage; // 键盘输入模式
@@ -170,6 +178,13 @@
         }
     }
     [self textFieldDashesWithTextField:textField];
+}
+
+#pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (_selectedBtn) {
+        _selectedBtn.selected = NO;
+    }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -234,11 +249,11 @@
 
 - (void)addTagWithTag:(NSString *)text {
     if (![self.tagCache objectForKey:text]) {
-        CLTagButton *tagBtn;
-        if (_textFieldEndEditting) {
-            tagBtn = [[CLTagButton alloc] initWithTextField:_inputField];
-        }else {
-            tagBtn = [CLTagButton initWithTagDesc:text];
+        CLTagButton *tagBtn = [[CLTagButton alloc] initWithTextField:_inputField];
+        if (!_textFieldEndEditting) {
+            CGFloat width = [text sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + tagBtn.bounds.size.height;
+            [tagBtn setTitle:text forState:UIControlStateNormal];
+            tagBtn.frame = CGRectMake(0, 0, width, tagBtn.bounds.size.height);
             [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:tagBtn];
         }
         tagBtn.tagBtnDelegate = self;
@@ -330,6 +345,8 @@
     [self removeTagWithTag:tagBtn.titleLabel.text];
     [_inputField becomeFirstResponder];
     _selectedBtn = nil;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCLTagViewTagDeleteNotification object:nil userInfo:@{kCLTagViewTagDeleteKey: tagBtn}];
 }
 
 - (void)tagButtonDidSelected:(CLTagButton *)tagBtn {
@@ -360,7 +377,7 @@
 - (void)textFieldDashesWithTextField:(UITextField *)textField {
     textField.borderStyle =  UITextBorderStyleNone;
     if (self.border) {
-        if (self.border.lineWidth == 0) {
+        if (self.border.lineWidth == 0 && textField.text.length != 0) {
             self.border.lineWidth = kCLDashesBorderWidth;
         }
         self.border.path = [UIBezierPath bezierPathWithRoundedRect:textField.bounds cornerRadius:textField.layer.cornerRadius].CGPath;
@@ -376,7 +393,11 @@
     
     border.frame = textField.bounds;
     
-    border.lineWidth = kCLDashesBorderWidth;
+    if (_inputField.text.length == 0) {
+        border.lineWidth = 0;
+    }else {
+        border.lineWidth = kCLDashesBorderWidth;
+    }
     
     border.lineCap = @"round";
     
