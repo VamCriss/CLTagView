@@ -11,6 +11,14 @@
 
 @interface CLRecentTagView : UIView
 
+/**
+ 用于高亮最近标签页中相同的标签(要高亮的话，需先给displayTags赋值，在赋值tagsModel)
+ */
+@property (strong, nonatomic) NSArray<NSString *> *displayTags;
+
+/**
+ 最近标签页中显示的标签
+ */
 @property (strong, nonatomic) NSArray<CLTagsModel *> *tagsModel;
 
 @end

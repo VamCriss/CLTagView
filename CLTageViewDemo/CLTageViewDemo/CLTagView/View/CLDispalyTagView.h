@@ -42,18 +42,5 @@
  */
 @property (strong, nonatomic, readonly) NSArray *tags;
 
-/**
- 删除标签操作
-
- @param tag 标签的文字说明
- */
-- (void)removeTagWithTag:(NSString *)tag;
-
-/**
- 添加标签
-
- @param text 标签的文字
- */
-- (void)addTagWithTag:(NSString *)text;
 
 @end

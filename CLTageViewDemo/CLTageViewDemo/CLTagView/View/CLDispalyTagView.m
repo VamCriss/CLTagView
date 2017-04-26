@@ -9,11 +9,12 @@
 #import "CLDispalyTagView.h"
 #import "CLTools.h"
 #import "CLTagButton.h"
+#import "CLTagsModel.h"
 
 @class CLTagTextField;
 @protocol CLTagTextFieldDelegate <NSObject>
 
-- (void)tagTextField:(CLTagTextField *)tagTextField;
+- (void)tagTextFieldDeleteCharacter:(CLTagTextField *)tagTextField;
 
 @end
 @interface CLTagTextField : UITextField
@@ -25,10 +26,10 @@
 @implementation CLTagTextField
 
 - (void)deleteBackward {
-    [super deleteBackward];
-    if ([self.tfDelegate respondsToSelector:@selector(tagTextField:)]) {
-        [self.tfDelegate tagTextField:self];
+    if ([self.tfDelegate respondsToSelector:@selector(tagTextFieldDeleteCharacter:)]) {
+        [self.tfDelegate tagTextFieldDeleteCharacter:self];
     }
+    [super deleteBackward];
 }
 
 // placeholder position
@@ -146,11 +147,17 @@
     }else {
         [self removeTagWithTag:tagBtn.titleLabel.text];
     }
+    _selectedBtn.selected = NO;
 }
 
 - (void)textFiledEditChanged:(NSNotification *)obj{
     
     UITextField *textField = (UITextField *)obj.object;
+    
+    if (textField.text.length == 0) {
+        self.border.lineWidth = 0;
+    }
+    
     if (_textFieldIsDeleting) {
         _textFieldIsDeleting = NO;
         [self reloadTextField:textField allStr:textField.text];
@@ -199,21 +206,30 @@
     NSInteger maxLength = self.maxStringAmount?:10;
     NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage;
     
+//    if (![lang isEqualToString:@"zh-Hans"]) {
+//        if (textField.text.length + string.length <= maxLength) {
+//            NSString *allStr = [textField.text stringByAppendingString:string];
+//            [self reloadTextField:textField allStr:allStr];
+//        }else {
+//            return NO;
+//        }
+//    }else {
+//        if ([self deptNameInputShouldChineseWithString:string]) {
+//            NSString *allStr = [textField.text stringByAppendingString:string];
+//            [self reloadTextField:textField allStr:allStr];
+//        }
+//    }
     if (![lang isEqualToString:@"zh-Hans"]) {
-        if (textField.text.length + string.length <= maxLength) {
-            NSString *allStr = [textField.text stringByAppendingString:string];
-            [self reloadTextField:textField allStr:allStr];
-        }else {
+        if (textField.text.length + string.length > maxLength) {
             return NO;
         }
     }else {
-        if ([self deptNameInputShouldChineseWithString:string]) {
-            NSString *allStr = [textField.text stringByAppendingString:string];
-            [self reloadTextField:textField allStr:allStr];
+        if (![self deptNameInputShouldChineseWithString:string]) {
+            return YES;
         }
     }
-
-    [self textFieldDashesWithTextField:textField];
+    NSString *allStr = [textField.text stringByAppendingString:string];
+    [self reloadTextField:textField allStr:allStr];
     return YES;
 }
 
@@ -250,10 +266,10 @@
 - (void)addTagWithTag:(NSString *)text {
     if (![self.tagCache objectForKey:text]) {
         CLTagButton *tagBtn = [[CLTagButton alloc] initWithTextField:_inputField];
+        CGFloat width = [text sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + tagBtn.bounds.size.height;
+        [tagBtn setTitle:text forState:UIControlStateNormal];
+        tagBtn.frame = CGRectMake(_inputField.frame.origin.x, _inputField.frame.origin.y, width, tagBtn.bounds.size.height);
         if (!_textFieldEndEditting) {
-            CGFloat width = [text sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + tagBtn.bounds.size.height;
-            [tagBtn setTitle:text forState:UIControlStateNormal];
-            tagBtn.frame = CGRectMake(0, 0, width, tagBtn.bounds.size.height);
             [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:tagBtn];
         }
         tagBtn.tagBtnDelegate = self;
@@ -336,8 +352,8 @@
     if (_selectedBtn) {
         _selectedBtn.selected = NO;
         _selectedBtn = nil;
-        [_inputField becomeFirstResponder];
     }
+    [_inputField becomeFirstResponder];
 }
 
 #pragma mark - CLTagButtonDelegate
@@ -350,6 +366,8 @@
 }
 
 - (void)tagButtonDidSelected:(CLTagButton *)tagBtn {
+    _selectedBtn.isNotSelf = YES;
+    _selectedBtn.selected = NO;
     _selectedBtn = tagBtn.isSelected? tagBtn: nil;
     if (!tagBtn.selected) {
         [_inputField becomeFirstResponder];
@@ -357,17 +375,16 @@
 }
 
 #pragma mark - CLTagTextFieldDelegate
-- (void)tagTextField:(CLTagTextField *)tagTextField {
+- (void)tagTextFieldDeleteCharacter:(CLTagTextField *)tagTextField {
     _textFieldIsDeleting = YES;
     if (tagTextField.text.length ==0) {
-        self.border.lineWidth = 0;
-        
         if (self.tagBtnArrayM.count > 0) {
             CLTagButton *lastBtn = self.tagBtnArrayM.lastObject;
             if (!lastBtn.isSelected) {
                 lastBtn.selected = YES;
             }else {
                 [self removeTagWithTag:lastBtn.titleLabel.text];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kCLTagViewTagDeleteNotification object:nil userInfo:@{kCLTagViewTagDeleteKey: lastBtn}];
             }
         }
     }
@@ -413,6 +430,23 @@
 
 - (NSArray *)tags {
     return [self.tagCache allKeys];
+}
+
+- (void)setLabels:(NSArray<NSString *> *)labels {
+    _labels = labels;
+    for (NSString *des in labels) {
+        [self addTagWithTag:des];
+    }
+    
+//    [self layoutTags:model.tagBtnArray];
+}
+
+- (void)layoutTags:(NSArray<CLTagButton *> *)tags {
+    for (CLTagButton *tagBtn in tags) {
+//        tagBtn.tagBtnDelegate = self;
+//        [_tagsCache setObject:tagBtn forKey:tagBtn.titleLabel.text];
+        [self addSubview:tagBtn];
+    }
 }
 
 #pragma mark - lazy

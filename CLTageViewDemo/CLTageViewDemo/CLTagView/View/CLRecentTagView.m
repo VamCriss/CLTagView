@@ -40,6 +40,7 @@
         CLTagView *tagView = [[CLTagView alloc] init];
         [self.scrollView addSubview:tagView];
         tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        tagView.displayTags = self.displayTags;
         tagView.tags = tagsModel.firstObject;
     }
 }

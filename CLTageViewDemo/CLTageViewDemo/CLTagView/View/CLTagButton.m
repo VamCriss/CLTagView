@@ -45,6 +45,7 @@
 }
 
 - (void)attributeRadius:(CGFloat)cornerRadius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor contentMode:(UIViewContentMode)contentMode font:(UIFont *)font{
+    
     self.layer.cornerRadius = cornerRadius;
     self.layer.borderWidth = borderWidth;
     self.layer.borderColor = borderColor.CGColor;
@@ -57,7 +58,11 @@
     if (self.isSelected) {
         self.backgroundColor = kCLTag_Selected_BackgroundColor;
     }else {
-         self.backgroundColor = kCLTag_Normal_BackgroundColor;
+        self.backgroundColor = kCLTag_Normal_BackgroundColor;
+        if (_isNotSelf) {
+            _isNotSelf = NO;
+            return;
+        }
         !_menuController?:[_menuController setMenuVisible:NO animated:YES];
     }
 }

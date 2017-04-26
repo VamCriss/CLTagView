@@ -7,22 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CLTagsModel : NSObject
-
-@property (copy, nonatomic) NSString *title;
-@property (strong, nonatomic) NSArray<NSString *> *tagsArray;
-
-/**
- 根据标签文字内容生成的标签按钮
- */
-@property (strong, nonatomic, readonly) NSArray *tagBtnArray;
-
-
-@end
+@class CLTagsModel;
 
 @interface CLTagView : UIView
 
 @property (strong, nonatomic) CLTagsModel *tags;
+
+/**
+ 用于高亮最近标签页中相同的标签
+ */
+@property (strong, nonatomic) NSArray<NSString *> *displayTags;
 
 @end

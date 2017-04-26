@@ -29,6 +29,10 @@
 
 @property (weak, nonatomic) id<CLTagButtonDelegate> tagBtnDelegate;
 
+/**
+ 最近标签展示页的标签是否被选中
+ */
 @property (assign, nonatomic) BOOL tagSelected;
+@property (assign, nonatomic) BOOL isNotSelf;
 
 @end

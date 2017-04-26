@@ -42,18 +42,36 @@
     [self.view addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_displayTagView]-0-[_recentTagView]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_displayTagView,_recentTagView)]];
     [self.view addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_recentTagView]-0-|" options:NSLayoutFormatAlignAllLeft | NSLayoutFormatAlignAllRight metrics:nil views:NSDictionaryOfVariableBindings(_recentTagView)]];
     
+    if (self.isHighlightTag) {
+        _recentTagView.displayTags = self.tagsDisplayArray;
+    }
+    
     _recentTagView.tagsModel = self.tagsModelArray;
+    _displayTagView.labels = self.tagsDisplayArray;
     
     // nav的属性，根据自己的需求更改
-    UIBarButtonItem *savaItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveItemClick:)];
-    self.navigationItem.rightBarButtonItem = savaItem;
-    
+    UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+    [saveBtn setTitleColor:cl_colorWithHex(0x66d547) forState:UIControlStateNormal];
+    [saveBtn addTarget:self action:@selector(saveItemClick:) forControlEvents:UIControlEventTouchUpInside];
+    [saveBtn sizeToFit];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:saveBtn];
+    self.navigationController.navigationBar.barTintColor = cl_colorWithHex(0x3a393d);
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+   
     self.navigationItem.title = @"标签";
 }
 
-- (void)saveItemClick:(UIBarButtonItem *)sender {
-    NSLog(@"%@", _displayTagView.tags);
+// 点击保存，获取输入的标签
+- (void)saveItemClick:(UIButton *)sender {
+//    NSLog(@"%@", _displayTagView.tags);
+    if ([self.tagsDelegate respondsToSelector:@selector(tagViewController:tags:)]) {
+        [self.tagsDelegate tagViewController:self tags:_displayTagView.tags];
+    }
 }
+
 
 
 @end
