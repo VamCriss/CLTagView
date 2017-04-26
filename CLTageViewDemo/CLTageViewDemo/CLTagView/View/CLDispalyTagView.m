@@ -203,6 +203,11 @@
         return YES;
     }
     
+    if (textField.text.length == 0 && _selectedBtn) {
+        _selectedBtn.selected = NO;
+        _selectedBtn = nil;
+    }
+    
     NSInteger maxLength = self.maxStringAmount?:10;
     NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage;
     
@@ -382,8 +387,10 @@
             CLTagButton *lastBtn = self.tagBtnArrayM.lastObject;
             if (!lastBtn.isSelected) {
                 lastBtn.selected = YES;
+                _selectedBtn = lastBtn;
             }else {
                 [self removeTagWithTag:lastBtn.titleLabel.text];
+                _selectedBtn.selected = NO;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kCLTagViewTagDeleteNotification object:nil userInfo:@{kCLTagViewTagDeleteKey: lastBtn}];
             }
         }

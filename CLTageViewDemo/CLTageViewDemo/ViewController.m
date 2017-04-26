@@ -28,6 +28,8 @@
     _recentTagsM = [[NSUserDefaults standardUserDefaults] objectForKey:@"CLRecentTags"];
     if (!_recentTagsM) {
         _recentTagsM = [NSMutableArray array];
+        NSArray *tagsArray = @[@"帅气", @"handsome啊发发发发生", @"酷爱的法师打发", @"1111111111111", @"这是一个设sad挨打大大多", @"撒打算发发发", @"dfsafafafasfaf"];
+        [_recentTagsM addObjectsFromArray:tagsArray];
     }
 }
 
@@ -46,14 +48,8 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     CLTagsModel *model = [[CLTagsModel alloc] init];
-    model.title = @"所有标签是啥";
+    model.title = @"所有标签";
     
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSArray *tagsArray = @[@"帅气", @"handsome啊发发发发生", @"酷爱的法师打发", @"1111111111111", @"这是一个设sad挨打大大多", @"撒打算发发发", @"dfsafafafasfaf"];
-        [_recentTagsM addObjectsFromArray:tagsArray];
-    });
     model.tagsArray = _recentTagsM.copy;
     
     CLTagViewController *tagVC = [[CLTagViewController alloc] init];
