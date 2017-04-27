@@ -93,13 +93,15 @@
     _inputField.borderStyle = UITextBorderStyleNone;
     _inputField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _inputField.autocorrectionType = UITextAutocorrectionTypeNo;
-    [_inputField sizeToFit];
     fontSize? (_inputField.font = [UIFont systemFontOfSize:fontSize]): nil;
+    [_inputField sizeToFit];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFiledEditChanged:)
                                                 name:UITextFieldTextDidChangeNotification
                                               object:_inputField];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTagDisplayView:) name:kCLRecentTagViewTagClickNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuControllerDidHide:) name:UIMenuControllerDidHideMenuNotification object:nil];
     
     return [self initWithFrame:CGRectMake(0, originalY, [UIScreen mainScreen].bounds.size.width, _inputField.bounds.size.height + kCLDistance * 2 + kCLTextFieldGap)];
 }
@@ -119,9 +121,12 @@
     _inputField.delegate = self;
     _inputField.tfDelegate = self;
     _tagHeight = _inputField.bounds.size.height + kCLTextFieldGap;
-    _originalWidth = [_inputField.placeholder sizeWithAttributes:@{NSFontAttributeName:_inputField.font}].width + _tagHeight;
+    if (![CLTools sharedTools].cornerRadius) {
+        [CLTools sharedTools].cornerRadius = _tagHeight * 0.5;
+    }
+    _inputField.layer.cornerRadius = [CLTools sharedTools].cornerRadius;
+    _originalWidth = [self tagWidthWithText:_inputField.placeholder];
     _inputField.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, _originalWidth, _tagHeight);
-    _inputField.layer.cornerRadius = _inputField.bounds.size.height * 0.5;
 }
 
 // 判断是否包含中文
@@ -139,6 +144,12 @@
 }
 
 #pragma mark - 通知方法
+
+- (void)menuControllerDidHide:(NSNotification *)notification {
+    _selectedBtn.selected = NO;
+    _selectedBtn = nil;
+}
+
 - (void)reloadTagDisplayView:(NSNotification *)notification {
     CLTagButton *tagBtn = notification.userInfo[kCLRecentTagViewTagClickKey];
     NSLog(@"%@", tagBtn.titleLabel.text);
@@ -185,6 +196,7 @@
         }
     }
     [self textFieldDashesWithTextField:textField];
+    [self layoutIfNeeded];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -211,19 +223,6 @@
     NSInteger maxLength = self.maxStringAmount?:10;
     NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage;
     
-//    if (![lang isEqualToString:@"zh-Hans"]) {
-//        if (textField.text.length + string.length <= maxLength) {
-//            NSString *allStr = [textField.text stringByAppendingString:string];
-//            [self reloadTextField:textField allStr:allStr];
-//        }else {
-//            return NO;
-//        }
-//    }else {
-//        if ([self deptNameInputShouldChineseWithString:string]) {
-//            NSString *allStr = [textField.text stringByAppendingString:string];
-//            [self reloadTextField:textField allStr:allStr];
-//        }
-//    }
     if (![lang isEqualToString:@"zh-Hans"]) {
         if (textField.text.length + string.length > maxLength) {
             return NO;
@@ -258,7 +257,7 @@
 
 // 更新textField的frame
 - (void)reloadTextField:(UITextField *)textField allStr:(NSString *)allStr {
-    CGFloat width = [allStr sizeWithAttributes:@{NSFontAttributeName:textField.font}].width + textField.layer.cornerRadius * 2;
+    CGFloat width = [self tagWidthWithText:allStr];
     CGRect rect = textField.frame;
     if (width > _originalWidth) {
         rect.size.width = width;
@@ -275,7 +274,7 @@
 - (void)addTagWithTag:(NSString *)text {
     if (![self.tagCache objectForKey:text]) {
         CLTagButton *tagBtn = [[CLTagButton alloc] initWithTextField:_inputField];
-        CGFloat width = [text sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + tagBtn.bounds.size.height;
+        CGFloat width = [self tagWidthWithText:text];
         [tagBtn setTitle:text forState:UIControlStateNormal];
         tagBtn.frame = CGRectMake(_inputField.frame.origin.x, _inputField.frame.origin.y, width, tagBtn.bounds.size.height);
         if (!_textFieldEndEditting) {
@@ -447,16 +446,6 @@
     _labels = labels;
     for (NSString *des in labels) {
         [self addTagWithTag:des];
-    }
-    
-//    [self layoutTags:model.tagBtnArray];
-}
-
-- (void)layoutTags:(NSArray<CLTagButton *> *)tags {
-    for (CLTagButton *tagBtn in tags) {
-//        tagBtn.tagBtnDelegate = self;
-//        [_tagsCache setObject:tagBtn forKey:tagBtn.titleLabel.text];
-        [self addSubview:tagBtn];
     }
 }
 

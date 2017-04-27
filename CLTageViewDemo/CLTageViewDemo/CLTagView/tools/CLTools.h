@@ -26,9 +26,9 @@ static inline UIColor *cl_colorWithHex(uint32_t hex) {
     return [UIColor colorWithRed:red / 255.0 green:green / 255.0 blue:blue / 255.0 alpha:1.0];
 }
 
-#define kCLTagFont 13                 // 标签文字的大小
+#define kCLTagFont 14                 // 标签文字的大小
 #define kCLDistance 10                // 上下两个标签的间隙
-#define kCLTextFieldGap 8             // 标签中，文字距离顶部边界线(4)与底部边界线(4)的距离（ 4 + 4 = 8）
+#define kCLTextFieldGap 16             // 标签中，文字距离顶部边界线(4)与底部边界线(4)的距离（ 4 + 4 = 8）
 #define kCLTagViewWidth 80            // 标签输入textField默认宽度
 #define kCLTextFieldsHorizontalGap 10 // 两个标签框的水平间距
 #define kCLTextFieldsVerticalGap 10   // 两个标签框的垂直间距
@@ -53,5 +53,19 @@ static inline UIColor *cl_colorWithHex(uint32_t hex) {
 #define kCLRecentTag_Selected_BorderColor cl_colorWithHex(0x55b936)// 标签选中状态下border颜色
 #define kCLRecentTag_Normal_BackgroundColor [UIColor whiteColor]   // 标签默认背景颜色
 #define kCLRecentTag_Selected_BackgroundColor [UIColor clearColor] // 标签选中状态下背景颜色
+
+@interface CLTools : NSObject
+
++ (instancetype)sharedTools;
+
+/**
+ 缓存标签的圆角半径
+ */
+@property (assign, nonatomic) CGFloat cornerRadius;
+
+@end
+
+
+
 
 

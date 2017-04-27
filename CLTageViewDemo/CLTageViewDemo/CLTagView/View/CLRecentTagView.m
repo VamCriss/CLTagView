@@ -9,6 +9,8 @@
 #import "CLRecentTagView.h"
 #import "CLTagView.h"
 #import "CLTools.h"
+#import "CLTagsModel.h"
+#import "CLTagButton.h"
 
 @interface CLRecentTagView ()
 
@@ -37,25 +39,26 @@
 }
 
 - (void)setTagsModel:(NSArray<CLTagsModel *> *)tagsModel {
-    if (tagsModel.count == 1) {
+    CLTagView *lastTagView;
+    CLTagView *perTagView;
+    for (int i = 0; i < tagsModel.count; i ++) {
         CLTagView *tagView = [[CLTagView alloc] init];
         [self.scrollView addSubview:tagView];
-        tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        tagView.frame = CGRectMake(0, !i?:(CGRectGetMaxY(perTagView.frame) + kCLDistance), [UIScreen mainScreen].bounds.size.width, CGRectGetMaxY(tagsModel[i].tagBtnArray.lastObject.frame)+ kCLDistance + kCLHeadViewdHeight);
+    
         tagView.displayTags = self.displayTags;
-        tagView.tags = tagsModel.firstObject;
-        __weak typeof(tagView) weakTagView = tagView;
-        tagView.reloadScrollViewContenSize = ^(CGFloat height) {
-            CGSize scrollContenSize = self.scrollView.contentSize;
-            scrollContenSize.height = height;
-            self.scrollView.contentSize = scrollContenSize;
-            CGRect rect = weakTagView.frame;
-            if (rect.size.height < height) {
-                rect.size.height = height;
-                weakTagView.frame = rect;
-            }
-        };
-        return;
+        tagView.tags = tagsModel[i];
+    
+        perTagView = tagView;
+        if (i == tagsModel.count - 1) {
+            lastTagView = tagView;
+        }
     }
+    
+    CGSize scrollContenSize = self.scrollView.contentSize;
+    scrollContenSize.height = CGRectGetMaxY(lastTagView.frame);
+    self.scrollView.contentSize = scrollContenSize;
     
 }
 

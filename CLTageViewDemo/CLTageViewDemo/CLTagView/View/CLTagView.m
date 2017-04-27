@@ -71,6 +71,7 @@
 - (void)layoutTags:(NSArray<CLTagButton *> *)tags {
     for (CLTagButton *tagBtn in tags) {
         tagBtn.tagBtnDelegate = self;
+        tagBtn.layer.cornerRadius = [CLTools sharedTools].cornerRadius;
         [_tagsCache setObject:tagBtn forKey:tagBtn.titleLabel.text];
         [self.tagsShowView addSubview:tagBtn];
     }
@@ -83,12 +84,6 @@
             }
         }
     }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.reloadScrollViewContenSize) {
-            self.reloadScrollViewContenSize(CGRectGetMaxY(tags.lastObject.frame) + kCLDistance + kCLHeadViewdHeight);
-        }
-    });
 }
 
 - (void)recentTagButtonClick:(CLTagButton *)tagBtn {

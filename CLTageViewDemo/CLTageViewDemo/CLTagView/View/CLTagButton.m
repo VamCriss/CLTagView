@@ -35,10 +35,12 @@
     [tagBtn setTitle:tagStr forState:UIControlStateNormal];
     [tagBtn setTitleColor:kCLRecentTag_Normal_TextColor forState:UIControlStateNormal];
     tagBtn.titleLabel.font = [UIFont systemFontOfSize:kCLTagFont];
-    [tagBtn sizeToFit];
-    CGFloat height = tagBtn.bounds.size.height + kCLTextFieldGap;
-    [tagBtn attributeRadius:height * 0.5 borderWidth:kCLDashesBorderWidth borderColor:kCLRecentTag_Normal_BorderColor contentMode:UIViewContentModeCenter font:tagBtn.titleLabel.font];
-    CGFloat width = [tagStr sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}].width + height;
+    
+    CGSize size = [tagStr sizeWithAttributes:@{NSFontAttributeName:tagBtn.titleLabel.font}];
+
+    CGFloat height = size.height + kCLTextFieldGap;
+    [tagBtn attributeRadius:[CLTools sharedTools].cornerRadius borderWidth:kCLDashesBorderWidth borderColor:kCLRecentTag_Normal_BorderColor contentMode:UIViewContentModeCenter font:tagBtn.titleLabel.font];
+    CGFloat width = size.width + height;
     tagBtn.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, width, height);
     [tagBtn addTarget:tagBtn action:@selector(recentTagClick:) forControlEvents:UIControlEventTouchUpInside];
     return tagBtn;

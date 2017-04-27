@@ -17,3 +17,16 @@ NSString *const kCLTagViewTagDeleteKey = @"kCLTagViewTagDeleteKey";
 NSString *const kCLDisplayTagViewAddTagNotification = @"kCLDisplayTagViewAddTagNotification";
 NSString *const kCLDisplayTagViewAddTagKey = @"kCLDisplayTagViewAddTagKey";
 NSString *const kCLDisplayTagViewAddTagObject = @"kCLDisplayTagViewAddTagObject";
+
+@implementation CLTools
+
++ (instancetype)sharedTools {
+    static CLTools *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] init];
+    });
+    return instance;
+}
+
+@end

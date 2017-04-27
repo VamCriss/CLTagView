@@ -27,6 +27,7 @@
 }
 
 - (void)showUI {
+    [CLTools sharedTools].cornerRadius = self.cornerRadius;
     CGFloat originalY = 0;
     if (self.navigationController) {
         originalY = 64;
@@ -45,6 +46,11 @@
     if (self.isHighlightTag) {
         _recentTagView.displayTags = self.tagsDisplayArray;
     }
+    
+    _displayTagView.maxRows = self.maxRows;
+    _displayTagView.maxStringAmount = self.maxStringAmount;
+    _displayTagView.normalTextColor = self.normalTextColor;
+    _displayTagView.textFieldBorderColor = self.textFieldBorderColor;
     
     _recentTagView.tagsModel = self.tagsModelArray;
     _displayTagView.labels = self.tagsDisplayArray;

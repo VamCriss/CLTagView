@@ -50,17 +50,25 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     CLTagsModel *model = [[CLTagsModel alloc] init];
     model.title = @"所有标签";
-    
     model.tagsArray = _recentTagsM.copy;
+    
+    CLTagsModel *model1 = [[CLTagsModel alloc] init];
+    model1.title = @"第一印象";
+    model1.tagsArray = @[@"牛B", @"霸气", @"杜甫", @"李白", @"asdadadasd", @"1231313131", @"sdksalkjfalkjfaj", @"zvkzknmncmalkjdsfkljaskldf"];
+    
+    CLTagsModel *model2 = [[CLTagsModel alloc] init];
+    model2.title = @"我最与众不同的是";
+    model2.tagsArray = @[@"确实不同", @"很不同", @"这有什么不同",@"大哥。真的不同", @"sccscasdfaf", @"adf345sdg", @"sadfl;k90808098", @"🌹,💔", @"择力", @"啫喱"];
     
     CLTagViewController *tagVC = [[CLTagViewController alloc] init];
     tagVC.tagsDelegate = self;
-    tagVC.tagsModelArray = @[model];
+    tagVC.tagsModelArray = @[model, model1, model2];
     tagVC.tagsDisplayArray = _tagArrayM;
     tagVC.highlightTag = YES;
     [self.navigationController pushViewController:tagVC animated:YES];
     _tagsLabel.text = @"";
 }
+#pragma mark - 属性设置可参照touchesBegan中的设置
 
 #pragma mark - CLTagViewControllerDelegate 返回贴上的标签，并做相关处理
 - (void)tagViewController:(CLTagViewController *)tagController tags:(NSArray<NSString *> *)tags {
