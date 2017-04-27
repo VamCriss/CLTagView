@@ -63,8 +63,8 @@
     CLTagViewController *tagVC = [[CLTagViewController alloc] init];
     tagVC.tagsDelegate = self;
     tagVC.tagsModelArray = @[model, model1, model2];
-    tagVC.tagsDisplayArray = _tagArrayM;
-    tagVC.highlightTag = YES;
+//    tagVC.tagsDisplayArray = _tagArrayM;
+//    tagVC.highlightTag = YES;
     [self.navigationController pushViewController:tagVC animated:YES];
     _tagsLabel.text = @"";
 }

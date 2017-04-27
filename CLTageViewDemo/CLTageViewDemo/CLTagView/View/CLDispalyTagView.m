@@ -154,7 +154,11 @@
     CLTagButton *tagBtn = notification.userInfo[kCLRecentTagViewTagClickKey];
     NSLog(@"%@", tagBtn.titleLabel.text);
     if (tagBtn.tagSelected) {
+        if (_inputField.text.length != 0) {
+            _textFieldIsEditting = YES;
+        }
         [self addTagWithTag:tagBtn.titleLabel.text];
+        _textFieldIsEditting = NO;
     }else {
         [self removeTagWithTag:tagBtn.titleLabel.text];
     }
@@ -194,6 +198,7 @@
         else{
             
         }
+        
     }
     [self textFieldDashesWithTextField:textField];
     [self layoutIfNeeded];
@@ -233,32 +238,32 @@
         }
     }
     NSString *allStr = [textField.text stringByAppendingString:string];
-    [self reloadTextField:textField allStr:allStr];
-    return YES;
+    return [self reloadTextField:textField allStr:allStr];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField.text.length == 0) {
         return YES;
     }
-    
-    _textFieldEndEditting = YES;
+
     [self addTagWithTag:textField.text];
-    _textFieldEndEditting = NO;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:kCLDisplayTagViewAddTagNotification object:kCLDisplayTagViewAddTagObject userInfo:@{kCLDisplayTagViewAddTagKey : textField.text}];
     
     textField.text = @"";
     self.border.lineWidth = 0;
     
-    
     return YES;
 }
 
 // 更新textField的frame
-- (void)reloadTextField:(UITextField *)textField allStr:(NSString *)allStr {
+- (BOOL)reloadTextField:(UITextField *)textField allStr:(NSString *)allStr {
     CGFloat width = [self tagWidthWithText:allStr];
     CGRect rect = textField.frame;
+//    if (width > self.bounds.size.width - kCLTagViewHorizontaGap * 2) {
+//        return NO;
+//    }
+    
     if (width > _originalWidth) {
         rect.size.width = width;
         textField.frame = rect;
@@ -269,6 +274,7 @@
         rect.size.width = _originalWidth;
         textField.frame = rect;
     }
+    return YES;
 }
 
 - (void)addTagWithTag:(NSString *)text {
@@ -277,9 +283,7 @@
         CGFloat width = [self tagWidthWithText:text];
         [tagBtn setTitle:text forState:UIControlStateNormal];
         tagBtn.frame = CGRectMake(_inputField.frame.origin.x, _inputField.frame.origin.y, width, tagBtn.bounds.size.height);
-        if (!_textFieldEndEditting) {
-            [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:tagBtn];
-        }
+        [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:tagBtn];
         tagBtn.tagBtnDelegate = self;
         [self addSubview:tagBtn];
         [self.tagBtnArrayM addObject:tagBtn];
@@ -295,6 +299,8 @@
     [self.tagCache removeObjectForKey:tag];
     [self.tagBtnArrayM[index] removeFromSuperview];
     [self.tagBtnArrayM removeObjectAtIndex:index];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCLTagViewTagDeleteNotification object:nil userInfo:@{kCLTagViewTagDeleteKey: tagbtn}];
     
     if (index == self.tagBtnArrayM.count) {
         [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:_inputField];
@@ -337,7 +343,6 @@
             _rowsOfTags --;
         }
         
-        
         self.contentSize = CGSizeMake(self.frame.size.width, tagViewExpectHeight);
         if (_rowsOfTags > (self.maxRows?:3)) {
             self.showsVerticalScrollIndicator = YES;
@@ -369,8 +374,6 @@
     [self removeTagWithTag:tagBtn.titleLabel.text];
     [_inputField becomeFirstResponder];
     _selectedBtn = nil;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCLTagViewTagDeleteNotification object:nil userInfo:@{kCLTagViewTagDeleteKey: tagBtn}];
 }
 
 - (void)tagButtonDidSelected:(CLTagButton *)tagBtn {
@@ -392,9 +395,8 @@
                 lastBtn.selected = YES;
                 _selectedBtn = lastBtn;
             }else {
-                [self removeTagWithTag:lastBtn.titleLabel.text];
                 _selectedBtn.selected = NO;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kCLTagViewTagDeleteNotification object:nil userInfo:@{kCLTagViewTagDeleteKey: lastBtn}];
+                [self removeTagWithTag:lastBtn.titleLabel.text];
             }
         }
     }
