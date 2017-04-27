@@ -30,6 +30,7 @@
     
     UIScrollView *scrollView = [[UIScrollView alloc] init];
     scrollView.alwaysBounceVertical = YES;
+    scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.scrollView = scrollView;
     [self addSubview:scrollView];
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -42,7 +43,20 @@
         tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         tagView.displayTags = self.displayTags;
         tagView.tags = tagsModel.firstObject;
+        __weak typeof(tagView) weakTagView = tagView;
+        tagView.reloadScrollViewContenSize = ^(CGFloat height) {
+            CGSize scrollContenSize = self.scrollView.contentSize;
+            scrollContenSize.height = height;
+            self.scrollView.contentSize = scrollContenSize;
+            CGRect rect = weakTagView.frame;
+            if (rect.size.height < height) {
+                rect.size.height = height;
+                weakTagView.frame = rect;
+            }
+        };
+        return;
     }
+    
 }
 
 @end

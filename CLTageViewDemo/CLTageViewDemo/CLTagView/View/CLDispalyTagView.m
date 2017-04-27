@@ -247,8 +247,12 @@
     [self addTagWithTag:textField.text];
     _textFieldEndEditting = NO;
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCLDisplayTagViewAddTagNotification object:kCLDisplayTagViewAddTagObject userInfo:@{kCLDisplayTagViewAddTagKey : textField.text}];
+    
     textField.text = @"";
     self.border.lineWidth = 0;
+    
+    
     return YES;
 }
 
@@ -432,7 +436,7 @@
 }
 
 -(void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:UITextViewTextDidChangeNotification object:_inputField];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSArray *)tags {

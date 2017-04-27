@@ -14,6 +14,10 @@ UIKIT_EXTERN NSString *const kCLRecentTagViewTagClickKey;
 UIKIT_EXTERN NSString *const kCLTagViewTagDeleteNotification;
 UIKIT_EXTERN NSString *const kCLTagViewTagDeleteKey;
 
+UIKIT_EXTERN NSString *const kCLDisplayTagViewAddTagNotification;
+UIKIT_EXTERN NSString *const kCLDisplayTagViewAddTagKey;
+UIKIT_EXTERN NSString *const kCLDisplayTagViewAddTagObject;
+
 // 16进制颜色
 static inline UIColor *cl_colorWithHex(uint32_t hex) {
     uint8_t red = (hex & 0xff0000) >> 16;
@@ -24,7 +28,7 @@ static inline UIColor *cl_colorWithHex(uint32_t hex) {
 
 #define kCLTagFont 13                 // 标签文字的大小
 #define kCLDistance 10                // 上下两个标签的间隙
-#define kCLTextFieldGap 8             // 标签中，文字距离顶部(4)与底部(4)的距离（ 4 + 4 = 8）
+#define kCLTextFieldGap 8             // 标签中，文字距离顶部边界线(4)与底部边界线(4)的距离（ 4 + 4 = 8）
 #define kCLTagViewWidth 80            // 标签输入textField默认宽度
 #define kCLTextFieldsHorizontalGap 10 // 两个标签框的水平间距
 #define kCLTextFieldsVerticalGap 10   // 两个标签框的垂直间距

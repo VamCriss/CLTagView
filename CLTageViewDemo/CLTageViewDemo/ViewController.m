@@ -25,7 +25,7 @@
     if (!_tagArrayM) {
         _tagArrayM = [NSMutableArray array];
     }
-    _recentTagsM = [[NSUserDefaults standardUserDefaults] objectForKey:@"CLRecentTags"];
+    _recentTagsM = [[[NSUserDefaults standardUserDefaults] objectForKey:@"CLRecentTags"] mutableCopy];
     if (!_recentTagsM) {
         _recentTagsM = [NSMutableArray array];
         NSArray *tagsArray = @[@"帅气", @"handsome啊发发发发生", @"酷爱的法师打发", @"1111111111111", @"这是一个设sad挨打大大多", @"撒打算发发发", @"dfsafafafasfaf"];
@@ -46,6 +46,7 @@
   
 }
 
+#pragma mark - 设置标签页的相关属性
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     CLTagsModel *model = [[CLTagsModel alloc] init];
     model.title = @"所有标签";
@@ -61,6 +62,7 @@
     _tagsLabel.text = @"";
 }
 
+#pragma mark - CLTagViewControllerDelegate 返回贴上的标签，并做相关处理
 - (void)tagViewController:(CLTagViewController *)tagController tags:(NSArray<NSString *> *)tags {
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"CLTags"];

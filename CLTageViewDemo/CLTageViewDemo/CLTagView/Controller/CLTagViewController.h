@@ -12,7 +12,7 @@
 @protocol CLTagViewControllerDelegate <NSObject>
 
 /**
- 返回标签展示页的所有标签
+ 返回标签展示页的所有标签(默认是点击保存按钮)
  @param tags 标签
  */
 - (void)tagViewController:(CLTagViewController *)tagController tags:(NSArray<NSString *> *)tags;

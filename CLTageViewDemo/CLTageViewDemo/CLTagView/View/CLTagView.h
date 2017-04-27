@@ -18,4 +18,6 @@
  */
 @property (strong, nonatomic) NSArray<NSString *> *displayTags;
 
+@property (copy, nonatomic) void(^reloadScrollViewContenSize)(CGFloat height);
+
 @end

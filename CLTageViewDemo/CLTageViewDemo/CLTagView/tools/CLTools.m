@@ -13,3 +13,7 @@ NSString *const kCLRecentTagViewTagClickKey = @"kCLRecentTagViewTagClickKey";
 
 NSString *const kCLTagViewTagDeleteNotification = @"kCLTagViewTagDeleteNotification";
 NSString *const kCLTagViewTagDeleteKey = @"kCLTagViewTagDeleteKey";
+
+NSString *const kCLDisplayTagViewAddTagNotification = @"kCLDisplayTagViewAddTagNotification";
+NSString *const kCLDisplayTagViewAddTagKey = @"kCLDisplayTagViewAddTagKey";
+NSString *const kCLDisplayTagViewAddTagObject = @"kCLDisplayTagViewAddTagObject";

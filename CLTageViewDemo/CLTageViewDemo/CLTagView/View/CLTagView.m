@@ -32,6 +32,8 @@
     _tagsCache = [NSMutableDictionary dictionary];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTagsStatus:) name:kCLTagViewTagDeleteNotification object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTagsStatus:) name:kCLDisplayTagViewAddTagNotification object:kCLDisplayTagViewAddTagObject];
+    
     self.backgroundColor = [UIColor purpleColor];
     
     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kCLHeadViewdHeight)];
@@ -81,6 +83,12 @@
             }
         }
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.reloadScrollViewContenSize) {
+            self.reloadScrollViewContenSize(CGRectGetMaxY(tags.lastObject.frame) + kCLDistance + kCLHeadViewdHeight);
+        }
+    });
 }
 
 - (void)recentTagButtonClick:(CLTagButton *)tagBtn {
@@ -89,9 +97,22 @@
 
 #pragma mark - 通知
 - (void)reloadTagsStatus:(NSNotification *)notification {
-    CLTagButton *tagBtn = notification.userInfo[kCLTagViewTagDeleteKey];
-    CLTagButton *deleteTagBtn = [_tagsCache objectForKey:tagBtn.titleLabel.text];
-    deleteTagBtn.tagSelected = NO;
+    
+    if (notification.object == nil) {
+        CLTagButton *tagBtn = notification.userInfo[kCLTagViewTagDeleteKey];
+        CLTagButton *deleteTagBtn = [_tagsCache objectForKey:tagBtn.titleLabel.text];
+        deleteTagBtn.tagSelected = NO;
+        return;
+    }
+    
+    if ([notification.object isKindOfClass:[NSString class]]) {
+        NSString *obj = notification.object;
+        if ([obj isEqualToString:kCLDisplayTagViewAddTagObject]) {
+            NSString *key = notification.userInfo[kCLDisplayTagViewAddTagKey];
+            CLTagButton *deleteTagBtn = [_tagsCache objectForKey:key];
+            deleteTagBtn.tagSelected = YES;
+        }
+    }
 }
 
 - (void)dealloc {
