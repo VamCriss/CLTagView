@@ -152,7 +152,7 @@
 
 - (void)reloadTagDisplayView:(NSNotification *)notification {
     CLTagButton *tagBtn = notification.userInfo[kCLRecentTagViewTagClickKey];
-    NSLog(@"%@", tagBtn.titleLabel.text);
+//    NSLog(@"%@", tagBtn.titleLabel.text);
     if (tagBtn.tagSelected) {
         if (_inputField.text.length != 0) {
             _textFieldIsEditting = YES;
@@ -196,7 +196,6 @@
         }
         // 有高亮选择的字符串，则暂不对文字进行统计和限制
         else{
-            
         }
         
     }
@@ -217,6 +216,7 @@
     }
     
     if ([string isEqualToString:@""]) {
+        _textFieldIsDeleting = YES;
         return YES;
     }
     
@@ -260,20 +260,19 @@
 - (BOOL)reloadTextField:(UITextField *)textField allStr:(NSString *)allStr {
     CGFloat width = [self tagWidthWithText:allStr];
     CGRect rect = textField.frame;
-//    if (width > self.bounds.size.width - kCLTagViewHorizontaGap * 2) {
-//        return NO;
-//    }
+    if (width > self.bounds.size.width - kCLTagViewHorizontaGap * 2) {
+        return YES;
+    }
     
     if (width > _originalWidth) {
         rect.size.width = width;
-        textField.frame = rect;
-        _textFieldIsEditting = YES;
-        [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:textField];
-        _textFieldIsEditting = NO;
     }else {
         rect.size.width = _originalWidth;
-        textField.frame = rect;
     }
+    textField.frame = rect;
+    _textFieldIsEditting = YES;
+    [self reloadTagViewPreTag:self.tagBtnArrayM.lastObject currentTagBtn:textField];
+    _textFieldIsEditting = NO;
     return YES;
 }
 
@@ -372,7 +371,9 @@
 #pragma mark - CLTagButtonDelegate
 - (void)tagButtonDelete:(CLTagButton *)tagBtn {
     [self removeTagWithTag:tagBtn.titleLabel.text];
-    [_inputField becomeFirstResponder];
+    if (_inputField.text.length) {
+        [_inputField becomeFirstResponder];
+    }
     _selectedBtn = nil;
 }
 
