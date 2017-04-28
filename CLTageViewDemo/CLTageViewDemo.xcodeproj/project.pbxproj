@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2815CCF61EAF1BA000311D60 /* CLTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2815CCF51EAF1BA000311D60 /* CLTagView.m */; };
 		2815CCFA1EB08A8A00311D60 /* CLTagsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2815CCF91EB08A8A00311D60 /* CLTagsModel.m */; };
-		2815CCFD1EB092DB00311D60 /* NSString+cl_tagFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 2815CCFC1EB092DB00311D60 /* NSString+cl_tagFlag.m */; };
 		287CE03A1EA9F215005A6F47 /* CLTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 287CE0391EA9F215005A6F47 /* CLTagButton.m */; };
 		289748511EA853BA00060A09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 289748501EA853BA00060A09 /* main.m */; };
 		289748541EA853BA00060A09 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 289748531EA853BA00060A09 /* AppDelegate.m */; };
@@ -47,8 +46,6 @@
 		2815CCF51EAF1BA000311D60 /* CLTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLTagView.m; sourceTree = "<group>"; };
 		2815CCF81EB08A8A00311D60 /* CLTagsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLTagsModel.h; sourceTree = "<group>"; };
 		2815CCF91EB08A8A00311D60 /* CLTagsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLTagsModel.m; sourceTree = "<group>"; };
-		2815CCFB1EB092DB00311D60 /* NSString+cl_tagFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+cl_tagFlag.h"; sourceTree = "<group>"; };
-		2815CCFC1EB092DB00311D60 /* NSString+cl_tagFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+cl_tagFlag.m"; sourceTree = "<group>"; };
 		287CE0381EA9F215005A6F47 /* CLTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLTagButton.h; sourceTree = "<group>"; };
 		287CE0391EA9F215005A6F47 /* CLTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLTagButton.m; sourceTree = "<group>"; };
 		2897484C1EA853BA00060A09 /* CLTageViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CLTageViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,8 +211,6 @@
 			children = (
 				289748921EA8588F00060A09 /* CLTools.h */,
 				FC7FDACE1EB06F31001DF894 /* CLTools.m */,
-				2815CCFB1EB092DB00311D60 /* NSString+cl_tagFlag.h */,
-				2815CCFC1EB092DB00311D60 /* NSString+cl_tagFlag.m */,
 			);
 			path = tools;
 			sourceTree = "<group>";
@@ -364,7 +359,6 @@
 				289748541EA853BA00060A09 /* AppDelegate.m in Sources */,
 				289748871EA8547100060A09 /* CLTagViewController.m in Sources */,
 				289748511EA853BA00060A09 /* main.m in Sources */,
-				2815CCFD1EB092DB00311D60 /* NSString+cl_tagFlag.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

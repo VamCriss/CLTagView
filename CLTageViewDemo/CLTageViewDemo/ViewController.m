@@ -10,6 +10,12 @@
 #import "CLTagViewController.h"
 #import "CLTagsModel.h"
 
+#ifdef DEBUG
+#define NSLog(fmt, ...) NSLog((@"%s [Line %d] [%s] " fmt), __FUNCTION__, __LINE__, __TIME__,##__VA_ARGS__)
+#else
+#define NSLog(...)
+#endif
+
 @interface ViewController () <CLTagViewControllerDelegate>
 
 @end
@@ -46,7 +52,7 @@
   
 }
 
-#pragma mark - 设置标签页的相关属性
+#pragma mark - 设置标签页的相关属性（初始化）
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     CLTagsModel *model = [[CLTagsModel alloc] init];
     model.title = @"所有标签";
@@ -62,9 +68,10 @@
     
     CLTagViewController *tagVC = [[CLTagViewController alloc] init];
     tagVC.tagsDelegate = self;
-    tagVC.tagsModelArray = @[model, model1, model2];
-//    tagVC.tagsDisplayArray = _tagArrayM;
-//    tagVC.highlightTag = YES;
+//    tagVC.tagsModelArray = @[model];
+    tagVC.tagsModelArray = @[model, model1, model2];  // 传入多个模型，显示多个标签组
+    tagVC.tagsDisplayArray = _tagArrayM;
+    tagVC.highlightTag = YES;
     [self.navigationController pushViewController:tagVC animated:YES];
     _tagsLabel.text = @"";
 }
@@ -73,6 +80,7 @@
 #pragma mark - CLTagViewControllerDelegate 返回贴上的标签，并做相关处理
 - (void)tagViewController:(CLTagViewController *)tagController tags:(NSArray<NSString *> *)tags {
     
+    // 没有网络。。。只能做本地处理。。。
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"CLTags"];
     _tagArrayM = [NSMutableArray array];
     [tagController.navigationController popViewControllerAnimated:YES];
