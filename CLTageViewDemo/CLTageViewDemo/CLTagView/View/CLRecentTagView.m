@@ -45,7 +45,8 @@
         CLTagView *tagView = [[CLTagView alloc] init];
         [self.scrollView addSubview:tagView];
         
-        tagView.frame = CGRectMake(0, !i?:(CGRectGetMaxY(perTagView.frame) + kCLDistance), [UIScreen mainScreen].bounds.size.width, CGRectGetMaxY(tagsModel[i].tagBtnArray.lastObject.frame)+ kCLDistance + kCLHeadViewdHeight);
+        tagView.frame = CGRectMake(0, !i?:(CGRectGetMaxY(perTagView.frame) + kCLDistance), 0, CGRectGetMaxY(tagsModel[i].tagBtnArray.lastObject.frame)+ kCLDistance + kCLHeadViewdHeight);
+        tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
         tagView.displayTags = self.displayTags;
         tagView.tags = tagsModel[i];

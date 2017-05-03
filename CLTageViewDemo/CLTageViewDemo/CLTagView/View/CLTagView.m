@@ -34,8 +34,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTagsStatus:) name:kCLDisplayTagViewAddTagNotification object:kCLDisplayTagViewAddTagObject];
     
-    self.backgroundColor = [UIColor purpleColor];
-    
     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kCLHeadViewdHeight)];
     [self addSubview:headView];
     headView.autoresizingMask = UIViewAutoresizingFlexibleWidth;

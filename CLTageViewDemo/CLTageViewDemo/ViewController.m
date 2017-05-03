@@ -80,7 +80,7 @@
 #pragma mark - CLTagViewControllerDelegate 返回贴上的标签，并做相关处理
 - (void)tagViewController:(CLTagViewController *)tagController tags:(NSArray<NSString *> *)tags {
     
-    // 没有网络。。。只能做本地处理。。。
+    // 没有后台服务器。。。只能做本地处理。。。
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"CLTags"];
     _tagArrayM = [NSMutableArray array];
     [tagController.navigationController popViewControllerAnimated:YES];

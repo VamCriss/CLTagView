@@ -25,10 +25,10 @@
 
 @interface CLTagButton : UIButton
 
-// 初始化标签展示页的标签
+// 初始化标签展示页的标签(上半部分标签)
 - (instancetype)initWithTextField:(UITextField *)textField;
 
-// 初始化最近标签页的标签
+// 初始化最近标签页的标签(下半部分标签)
 + (instancetype)initWithTagDesc:(NSString *)tagStr;
 
 @property (weak, nonatomic) id<CLTagButtonDelegate> tagBtnDelegate;

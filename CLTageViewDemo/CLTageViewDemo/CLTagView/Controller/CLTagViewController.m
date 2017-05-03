@@ -56,6 +56,7 @@
     _displayTagView.labels = self.tagsDisplayArray;
     
     // nav的属性，根据自己的需求更改
+#warning properties of navgitonController, you can reset them for your app
     UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [saveBtn setTitle:@"保存" forState:UIControlStateNormal];
     [saveBtn setTitleColor:cl_colorWithHex(0x66d547) forState:UIControlStateNormal];
