@@ -126,6 +126,9 @@
     }
     _inputField.layer.cornerRadius = [CLTools sharedTools].cornerRadius;
     _originalWidth = [self tagWidthWithText:_inputField.placeholder];
+    if (kCLTagViewWidth > _originalWidth) {
+        _originalWidth = kCLTagViewWidth;
+    }
     _inputField.frame = CGRectMake(kCLTagViewHorizontaGap, kCLDistance, _originalWidth, _tagHeight);
 }
 

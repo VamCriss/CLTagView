@@ -29,7 +29,7 @@ static inline UIColor *cl_colorWithHex(uint32_t hex) {
 #define kCLTagFont 14                 // 标签文字的大小
 #define kCLDistance 10                // 上下两个标签的间隙
 #define kCLTextFieldGap 16             // 标签中，文字距离顶部边界线(4)与底部边界线(4)的距离（ 4 + 4 = 8）
-#define kCLTagViewWidth 80            // 标签输入textField默认宽度
+#define kCLTagViewWidth 80.f           // 标签输入textField默认宽度，仅仅当该宽度比默认文字的总宽度大时生效
 #define kCLTextFieldsHorizontalGap 10 // 两个标签框的水平间距
 #define kCLTextFieldsVerticalGap 10   // 两个标签框的垂直间距
 #define kCLTagViewHorizontaGap 13     // 标签展示页水平两端的与标签的距离
