@@ -1,12 +1,12 @@
-#CLTagView
+# CLTagView
 - 高仿微信标签页，快速创建标签页，可多标签组  
 - 视图主要分为上下两个部分，和微信标签页一样，上部分为<font color = "red">输入标签展示框</font>，下部分为<font color = "red">历史标签展示框</font>
 
-###使用方式
+### 使用方式
 - 只需将**CLTagView**文件夹拖入工程，按照以下方式初始化即可
 - **CLTools.h**中有对标签视图相关属性的设置，如颜色，大小等
 
-####初始化并显示
+#### 初始化并显示
 
 ```
 // ----- 一个模型就是一个标签组
@@ -51,7 +51,7 @@ tagVC.highlightTag = YES;
 
 ```
 
-####CLTagViewController.h中初始化属性
+#### CLTagViewController.h中初始化属性
 ```
 @interface CLTagViewController : UIViewController
 
@@ -97,5 +97,5 @@ tagVC.highlightTag = YES;
 ```
 
 
-####效果如下
+#### 效果如下
 ![Markdown](http://i2.muimg.com/583177/60989174db92d0a5.gif)
