@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author       = { "criss" => "ericluo0114@hotmail.com" }
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/VamCriss/CLTagView.git", :tag => s.version }
-  s.source_files  = 'CLTagView/**/*.*'
+  s.source_files  = 'CLTageViewDemo/CLTagView/**/*.*'
   s.requires_arc = true
 
 end
